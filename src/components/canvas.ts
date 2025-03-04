@@ -71,6 +71,12 @@ export class Canvas {
         })
     }
 
+    public clearCanvas(): void
+    {
+        this.pen.clearRect(0, 0, this.width, this.height)
+        this.drawAxisLines()
+    }
+
     // === Getter / Setter ===
     public getElement(): HTMLCanvasElement
     {
