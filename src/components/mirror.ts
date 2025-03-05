@@ -50,7 +50,7 @@ export class Mirror {
         this.lineGroup.setOffset(distance, -this.lineGroup.getHeight()) 
 
         this.canvas.clearCanvas()
-        this.canvas.setPenColor("blue")
+        this.canvas.setPenColor("#040404")
         this.canvas.drawLines(this.lineGroup.getLines(), this.lineGroup.getOffsetX(), this.lineGroup.getOffsetY())
     }
 
