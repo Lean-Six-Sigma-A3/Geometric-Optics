@@ -29,3 +29,14 @@ body {
 #canvas {
   border: 2px solid slategray;
 }
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.control-input-section {
+  display: flex;
+  flex-direction: column;
+}
