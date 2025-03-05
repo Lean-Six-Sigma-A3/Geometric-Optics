@@ -37,19 +37,19 @@ export class Canvas {
 
         // Secara default, anchor (patokan) saat merender garis berada pada tengah-tengah canvas
         const x1 = useCenterAnchor
-            ? line.x1 + line.getXPadding() + this.getXCenter()
+            ? line.x1 + line.getXOffset() + this.getXCenter()
             : line.x1
 
         const y1 = useCenterAnchor
-            ? line.y1 + line.getYPadding() + this.getYCenter()
+            ? line.y1 + line.getYOffset() + this.getYCenter()
             : line.y1 
 
         const x2 = useCenterAnchor
-            ? line.x2 + line.getXPadding() + this.getXCenter()
+            ? line.x2 + line.getXOffset() + this.getXCenter()
             : line.x2
 
         const y2 = useCenterAnchor
-            ? line.y2 + line.getYPadding() + this.getYCenter()
+            ? line.y2 + line.getYOffset() + this.getYCenter()
             : line.y2
     
         // Mulai path untuk garis

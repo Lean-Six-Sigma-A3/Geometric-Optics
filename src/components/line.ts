@@ -28,7 +28,7 @@ export class Line extends CanvasObject {
 
     // === Parser ===
     // Parse Line dari array koordinat yang diberikan
-    public static fromCoordinates(coordinates: number[][], xPadding: number = 0, yPadding: number = 0): Line[]
+    public static fromCoordinates(coordinates: number[][], xOffset: number = 0, yOffset: number = 0): Line[]
     {
         if (!coordinates.every(coordinate => coordinate.length === 4)) {
             throw new Error("Data garis tidak valid!")
@@ -42,18 +42,18 @@ export class Line extends CanvasObject {
                 y2: coordinate[3],
             })
 
-            line.setPadding(xPadding, yPadding)
+            line.setOffset(xOffset, yOffset)
 
             return line
         })
     }
 
-    public static fromArray(lines: LineConstructorParameters[], xPadding: number = 0, yPadding: number = 0): Line[]
+    public static fromArray(lines: LineConstructorParameters[], xOffset: number = 0, yOffset: number = 0): Line[]
     {
         return lines.map(line => {
             const lineObject = new Line(line)
 
-            lineObject.setPadding(xPadding, yPadding)
+            lineObject.setOffset(xOffset, yOffset)
 
             return lineObject
         })

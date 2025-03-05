@@ -1,32 +1,32 @@
-// Cuma parent class untuk Line, biar bisa nambah padding aja sih
-// Rencananya, padding dipake biar nanti bisa digeser-geser Line-nya 
+// Cuma parent class untuk Line, biar bisa nambah offset aja sih
+// Rencananya, offset dipake biar nanti bisa digeser-geser Line-nya 
 export class CanvasObject {
-    private _xPadding: number = 0
-    private _yPadding: number = 0
+    private _xOffset: number = 0
+    private _yOffset: number = 0
 
-    public setPadding(x: number, y: number): void
+    public setOffset(x: number, y: number): void
     {
-        this._xPadding = x
-        this._yPadding = y
+        this._xOffset = x
+        this._yOffset = y
     }
 
-    public getXPadding(): number
+    public getXOffset(): number
     {
-        return this._xPadding
+        return this._xOffset
     }
 
-    public setXPadding(value: number): void
+    public setXOffset(value: number): void
     {
-        this._xPadding = value
+        this._xOffset = value
     }
 
-    public getYPadding(): number
+    public getYOffset(): number
     {
-        return this._yPadding
+        return this._yOffset
     }
 
-    public setYPadding(value: number): void
+    public setYOffset(value: number): void
     {
-        this._yPadding = value
+        this._yOffset = value
     }
 }
