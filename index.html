@@ -8,11 +8,16 @@
   </head>
 
   <body>
-    <div class="wrapper">
+    <main class="wrapper">
       <canvas id="canvas"></canvas>
 
-      <input type="range" id="distance">
-    </div>
+      <div class="controls">
+        <section class="control-input-section">
+          <label for="distance">Jarak</label>
+          <input type="range" id="distance">
+        </section>
+      </div>
+    </main>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
