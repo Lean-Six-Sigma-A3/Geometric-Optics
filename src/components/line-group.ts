@@ -1,23 +1,31 @@
 import { Line } from "./line"
 
 export interface LineGroupOptions {
-    offsetX?: number
-    offsetY?: number
+    x?: number
+    y?: number
     scale?: number
+    color?: string
 }
 
 export class LineGroup {
+    private originalLines: Line[]
     private lines: Line[]
-    private offsetX: number
-    private offsetY: number
+
+    private x: number
+    private y: number
     private scale: number
+
+    private color: string
 
     public constructor(lines: Line[], options?: LineGroupOptions)
     {
-        this.lines = lines
-        this.offsetX = options?.offsetX ?? 0
-        this.offsetY = options?.offsetY ?? 0
+        this.x = options?.x ?? 0
+        this.y = options?.y ?? 0
         this.scale = options?.scale ?? 1
+        this.color = options?.color ?? "#000000"
+
+        this.originalLines = lines
+        this.lines = this.calculateLines(this.originalLines)
     }
 
     // === Parser ===
@@ -39,6 +47,17 @@ export class LineGroup {
     }
 
     // === Helpers ===
+    private calculateLines(lines: Line[]): Line[] {
+        // Sumbu y di-flip biar nilai positif arahnya ke atas
+        // Lihat: https://www.w3schools.com/graphics/canvas_coordinates.asp
+        return lines.map(line => new Line({
+            x1: (line.x1 + this.x) * this.scale,
+            y1: -(line.y1 + this.y) * this.scale,
+            x2: (line.x2 + this.x) * this.scale,
+            y2: -(line.y2 + this.y) * this.scale,
+        })) 
+    }
+
     public getWidth(): number
     {
         const xCoordinates = this.lines.flatMap(line => [line.x1, line.x2])
@@ -46,7 +65,7 @@ export class LineGroup {
         const lowestXCoordinate = Math.min.apply(Math, xCoordinates)
         const highestXCoordinate = Math.max.apply(Math, xCoordinates)
 
-        return Math.abs(highestXCoordinate - lowestXCoordinate) * this.scale
+        return Math.abs(highestXCoordinate - lowestXCoordinate)
     }
 
     public getHeight(): number
@@ -56,7 +75,31 @@ export class LineGroup {
         const lowestYCoordinate = Math.min.apply(Math, yCoordinates)
         const highestYCoordinate = Math.max.apply(Math, yCoordinates)
 
-        return Math.abs(highestYCoordinate - lowestYCoordinate) * this.scale
+        return Math.abs(highestYCoordinate - lowestYCoordinate)
+    }
+
+    public getCenterX(): number
+    {
+        const xCoordinates = this.lines.flatMap(line => [line.x1, line.x2])
+
+        const lowestXCoordinate = Math.min.apply(Math, xCoordinates)
+        const highestXCoordinate = Math.max.apply(Math, xCoordinates)
+
+        const centerHeightX = Math.abs(highestXCoordinate - lowestXCoordinate) / 2
+
+        return highestXCoordinate - centerHeightX
+    }
+
+    public getCenterY(): number
+    {
+        const yCoordinates = this.lines.flatMap(line => [line.y1, line.y2])
+
+        const lowestYCoordinate = Math.min.apply(Math, yCoordinates)
+        const highestYCoordinate = Math.max.apply(Math, yCoordinates)
+
+        const centerHeightY = Math.abs(highestYCoordinate - lowestYCoordinate) / 2
+
+        return highestYCoordinate - centerHeightY
     }
 
     public cloneObject(): LineGroup {
@@ -67,50 +110,51 @@ export class LineGroup {
                 x2: line.x2,
                 y2: line.y2,
             })),
-            { offsetX: this.offsetX, offsetY: this.offsetY, scale: this.scale }
+            { x: this.x, y: this.y, scale: this.scale }
         );
     }
 
     // === Getter & Setter ===
     public getLines(): Line[]
     {
-        return this.lines.map(line => new Line({
-            x1: line.x1 * this.scale,
-            y1: line.y1 * this.scale,
-            x2: line.x2 * this.scale,
-            y2: line.y2 * this.scale,
-        })) 
+        return this.lines
     }
 
-    public setLines(lines: Line[]): void
+    public setLines(value: Line[])
     {
-        this.lines = lines
+        this.lines = value
     }
 
-    public setOffset(x: number, y: number): void
+    public setPosition(x: number, y: number): void
     {
-        this.offsetX = x
-        this.offsetY = y
+        this.x = x
+        this.y = y
+
+        this.lines = this.calculateLines(this.originalLines)
     }
 
-    public getOffsetX(): number
+    public getX(): number
     {
-        return this.offsetX
+        return this.x
     }
 
-    public setOffsetX(value: number): void
+    public setX(value: number): void
     {
-        this.offsetX = value
+        this.x = value
+
+        this.lines = this.calculateLines(this.originalLines)
     }
 
-    public getOffsetY(): number
+    public getY(): number
     {
-        return this.offsetY
+        return this.y
     }
 
-    public setOffsetY(value: number): void
+    public setY(value: number): void
     {
-        this.offsetY = value
+        this.y = value
+        
+        this.lines = this.calculateLines(this.originalLines)
     }
 
     public getScale(): number
@@ -121,5 +165,17 @@ export class LineGroup {
     public setScale(scale: number): void
     {
         this.scale = scale
+
+        this.lines = this.calculateLines(this.originalLines)
+    }
+
+    public getColor(): string
+    {
+        return this.color
+    }
+
+    public setColor(color: string): void
+    {
+        this.color = color
     }
 }

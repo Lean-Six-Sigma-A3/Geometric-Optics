@@ -15,25 +15,32 @@ const canvas = new Canvas({
 // Parsing koordinat menjadi object Line (untuk ditampilkan)
 // [x1, y1, x2, y2]
 const coordinates = [
-  [60, 80, 110, 0],
-  [40, 60, 110, 0],
-  [20, 40, 110, 0], 
-  [0, 20, 110, 0], 
-  [60, 80, 40, 60], 
-  [40, 60, 25, 75], 
-  [25, 75, 45, 64], 
-  [25, 75, 20, 40], 
-  [20, 40, 0, 20],
+  [5, -40, 55, 40],
+  [-15, -20, 55, 40],
+  [-35, 0, 55, 40],
+  [-55, 20, 55, 40],
+  [5, -40, -15, -20],
+  [-15, -20, -30, -35],
+  [-30, -35, -10, -25],
+  [-30, -35, -35, 0],
+  [-35, 0, -55, 20],
 ]
 
-const mirrorObject = LineGroup.fromCoordinates(coordinates)
+// const coordinates = [
+//   [-50, 70, 50, 50],
+//   [50, 50, 50, -50],
+//   [50, -50, -50, -50],
+//   [-50, -50, -50, 70],
+// ]
+
+const mirrorObject = LineGroup.fromCoordinates(coordinates, { x: 0, y: 0, scale: 2 })
 
 // Buat object Mirror, Mirror ini (nantinya) berisi logic utama cerminnya
 const mirror = new Mirror({
   canvas: canvas,
   mirrorObject: mirrorObject,
   controlEl: {
-    distance: document.querySelector<HTMLInputElement>('#distance')!,
+    objectX: document.querySelector<HTMLInputElement>('#distance')!,
     scale: document.querySelector<HTMLInputElement>('#scale')!,
   }
 })

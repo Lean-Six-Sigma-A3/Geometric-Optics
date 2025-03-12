@@ -1,5 +1,6 @@
 import { randomString } from "../utils/string"
 import { Line } from "./line"
+import { LineGroup } from "./line-group"
 
 export interface CanvasConstructorParameters {
     canvasEl: HTMLCanvasElement
@@ -58,7 +59,7 @@ export class Canvas {
     }
 
     // === Utama ===
-    public drawLine(line: Line, offsetX: number = 0, offsetY: number = 0, useCenterAnchor: boolean = true): void
+    public drawLine(line: Line, offsetX: number = 0, offsetY: number = 0): void
     {
         // Karena color itu opsional pada object line, sebelum ganti warna pen harus dicek dulu ada nilainya atau tidak.
         if (line.color) {
@@ -66,21 +67,10 @@ export class Canvas {
         }
 
         // Secara default, anchor (patokan) saat merender garis berada pada tengah-tengah canvas
-        const x1 = useCenterAnchor
-            ? line.x1 + offsetX + this.getXCenter()
-            : line.x1
-
-        const y1 = useCenterAnchor
-            ? line.y1 + offsetY + this.getYCenter()
-            : line.y1 
-
-        const x2 = useCenterAnchor
-            ? line.x2 + offsetX + this.getXCenter()
-            : line.x2
-
-        const y2 = useCenterAnchor
-            ? line.y2 + offsetY + this.getYCenter()
-            : line.y2
+        const x1 = line.x1 + offsetX + this.getXCenter()
+        const y1 = line.y1 + offsetY + this.getYCenter()
+        const x2 = line.x2 + offsetX + this.getXCenter()
+        const y2 = line.y2 + offsetY + this.getYCenter()
     
         // Mulai path untuk garis
         this.pen.beginPath()
@@ -88,17 +78,39 @@ export class Canvas {
         this.pen.moveTo(x1, y1)
         // Buat tujuan garis ke (x2, y2) dari posisi sebelumnya
         this.pen.lineTo(x2, y2)
-        // Gambar (render) garisnya
-        this.pen.stroke()
         // Tutup path (biar gak tercampur dengan garis lainnya)
         this.pen.closePath()
+        // Gambar (render) garisnya
+        this.pen.stroke()
     }
 
-    public drawLines(lines: Line[], offsetX: number = 0, offsetY: number = 0, useCenterAnchor: boolean = true): void
+    public drawLineGroup(lineGroup: LineGroup): void
     {
-        lines.forEach(line => {
-            this.drawLine(line, offsetX, offsetY, useCenterAnchor)
+        // Mulai path untuk garis
+        this.pen.beginPath()
+        lineGroup.getLines().forEach(line => {
+            // Secara default, anchor (patokan) saat merender garis berada pada tengah-tengah canvas
+            const x1 = line.x1 + this.getXCenter()
+            const y1 = line.y1 + this.getYCenter()
+            const x2 = line.x2 + this.getXCenter()
+            const y2 = line.y2 + this.getYCenter()
+        
+            // Geser pen ke (x1, y1)
+            this.pen.moveTo(x1, y1)
+            // Buat tujuan garis ke (x2, y2) dari posisi sebelumnya
+            this.pen.lineTo(x2, y2)
         })
+        // Tutup path (biar gak tercampur dengan garis lainnya)
+        this.pen.closePath()
+
+        // Gambar (render) garisnya
+        this.setPenColor(lineGroup.getColor())
+        this.pen.stroke()
+
+        this.pen.beginPath()
+        this.pen.arc(lineGroup.getCenterX() + this.getXCenter(), lineGroup.getCenterY() + this.getYCenter(), 4, 0, 2 * Math.PI)
+        this.pen.closePath()
+        this.pen.fill()
     }
 
     public clearCanvas(): void
@@ -161,23 +173,15 @@ export class Canvas {
     // Untuk menggambar garis sumbu
     private drawAxisLines(): void
     {
-        const xAxisLine = new Line({
-            x1: 0,
-            y1: this.getYCenter(),
-            x2: this.width,
-            y2: this.getYCenter(),
-        })
-
-        const yAxisLine = new Line({
-            x1: this.getXCenter(),
-            y1: 0,
-            x2: this.getXCenter(),
-            y2: this.height,
-        })
+        this.pen.beginPath()
+        this.pen.moveTo(0, this.getYCenter())
+        this.pen.lineTo(this.width, this.getYCenter())
+        this.pen.moveTo(this.getXCenter(), 0)
+        this.pen.lineTo(this.getXCenter(), this.height)
+        this.pen.closePath()
 
         this.setPenColor("lightgrey")
-        this.drawLine(xAxisLine, 0, 0, false)
-        this.drawLine(yAxisLine, 0, 0, false)
+        this.pen.stroke()
         this.resetPenColor()
     }
 

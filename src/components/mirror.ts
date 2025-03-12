@@ -9,7 +9,7 @@ export interface MirrorConstructorParameters {
 }
 
 export interface MirrorControlElements {
-    distance: HTMLInputElement
+    objectX: HTMLInputElement
     scale: HTMLInputElement
 }
 
@@ -27,16 +27,13 @@ export class Mirror {
         this.prepareControlElements()
         this.setupEvents()
         this.draw()
-        this.drawReflectedObject()
     }
 
     private prepareControlElements(): void
     {
-        const maxDistance = this.canvas.getWidth() / 2 - (this.lineGroup?.getWidth() ?? 0)
-
         // Atur range min & max dari input slider
-        this.controlEl.distance.max = maxDistance.toString() 
-        this.controlEl.distance.min = "0"
+        this.controlEl.objectX.max = (this.canvas.getWidth() / 4).toString()
+        this.controlEl.objectX.min = (-this.canvas.getWidth() / 4).toString()
 
         this.controlEl.scale.value = this.lineGroup?.getScale().toString() ?? "1"
         this.controlEl.scale.max = "4"
@@ -54,14 +51,12 @@ export class Mirror {
         Object.values(this.controlEl).forEach(control => {
             control.addEventListener('input', () => {
                 this.draw()
-                this.drawReflectedObject()
             })
         })
 
         this.canvas.onResize(() => {
             this.prepareControlElements()
             this.draw()
-            this.drawReflectedObject()
         })
     }
 
@@ -72,28 +67,12 @@ export class Mirror {
             return
         }
 
-        // Jarak objek (line group) dari cermin, dengan asumsi cermin berada di tengah-tengah canvas.
-        const distance = parseInt(this.controlEl.distance.value) - this.canvas.getWidth() / 2 
+        const posX = parseInt(this.controlEl.objectX.value)
 
-        // Pastikan koordinat Y terkecil dalam line group adalah 0, agar tidak bug
-        this.lineGroup.setOffset(distance, -this.lineGroup.getHeight()) 
+        this.lineGroup.setX(posX)
 
         this.canvas.clearCanvas()
-        this.canvas.setPenColor("blue")
-        this.canvas.drawLines(this.lineGroup.getLines(), this.lineGroup.getOffsetX(), this.lineGroup.getOffsetY())
-    }
-
-    private drawReflectedObject(): void 
-    {
-        if (!this.lineGroup) {
-            return
-        }
-    
-        const distance = parseInt(this.controlEl.distance.value) - this.canvas.getWidth() / 2 
-
-        this.lineGroup.setOffset(distance, this.lineGroup.getHeight()) 
-
-        this.canvas.setPenColor("red")
-        this.canvas.drawLines(this.lineGroup.getLines(), this.lineGroup.getOffsetX(), this.lineGroup.getOffsetY())
+        this.lineGroup.setColor("blue")
+        this.canvas.drawLineGroup(this.lineGroup)
     }
 }
