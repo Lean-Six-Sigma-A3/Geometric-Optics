@@ -38,6 +38,7 @@ body {
   flex-wrap: wrap;
   padding: 0.5rem;
 
+  background-color: white;
   border: 1px grey solid;
   border-radius: 0.5rem;
   box-shadow: 0 0 1rem 0.05rem #00000030;
