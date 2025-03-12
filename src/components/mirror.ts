@@ -3,7 +3,7 @@ import { LineGroup } from "./line-group"
 
 export interface MirrorConstructorParameters {
     canvas: Canvas,
-    mirrorObject?: LineGroup | null,
+    mirrorObject: LineGroup,
 
     controlEl: MirrorControlElements,
 }
@@ -15,13 +15,13 @@ export interface MirrorControlElements {
 
 export class Mirror {
     private canvas: Canvas
-    private lineGroup: LineGroup | null
+    private lineGroup: LineGroup
     private controlEl: MirrorControlElements
 
     public constructor(params: MirrorConstructorParameters)
     {
         this.canvas = params.canvas
-        this.lineGroup = params.mirrorObject ?? null
+        this.lineGroup = params.mirrorObject
         this.controlEl = params.controlEl
 
         this.prepareControlElements()
@@ -32,14 +32,14 @@ export class Mirror {
     private prepareControlElements(): void
     {
         // Atur range min & max dari input slider
-        this.controlEl.objectX.value = "0" 
         this.controlEl.objectX.max = (this.canvas.getWidth() / 2).toString()
         this.controlEl.objectX.min = (-this.canvas.getWidth() / 2).toString()
+        this.controlEl.objectX.value = this.lineGroup.getX().toString()
 
-        this.controlEl.scale.value = this.lineGroup?.getScale().toString() ?? "1"
         this.controlEl.scale.max = "4"
         this.controlEl.scale.min = "1"
         this.controlEl.scale.step = "0.01"
+        this.controlEl.scale.value = this.lineGroup?.getScale().toString() ?? "1"
     }
 
     private setupEvents(): void
