@@ -1,20 +1,28 @@
 import { Line } from "./line"
 
+export interface LineGroupOptions {
+    offsetX?: number
+    offsetY?: number
+    scale?: number
+}
+
 export class LineGroup {
     private lines: Line[]
     private offsetX: number
     private offsetY: number
+    private scale: number
 
-    public constructor(lines: Line[], offsetX: number = 0, offsetY: number = 0)
+    public constructor(lines: Line[], options?: LineGroupOptions)
     {
         this.lines = lines
-        this.offsetX = offsetX
-        this.offsetY = offsetY
+        this.offsetX = options?.offsetX ?? 0
+        this.offsetY = options?.offsetY ?? 0
+        this.scale = options?.scale ?? 1
     }
 
     // === Parser ===
     // Parse Line dari array koordinat yang diberikan
-    public static fromCoordinates(coordinates: number[][], offsetX: number = 0, offsetY: number = 0): LineGroup
+    public static fromCoordinates(coordinates: number[][], options?: LineGroupOptions): LineGroup
     {
         if (!coordinates.every(coordinate => coordinate.length === 4)) {
             throw new Error("Data garis tidak valid!")
@@ -27,7 +35,7 @@ export class LineGroup {
             y2: coordinate[3],
         }))
 
-        return new this(lines, offsetX, offsetY)
+        return new this(lines, options)
     }
 
     // === Helpers ===
@@ -38,7 +46,7 @@ export class LineGroup {
         const lowestXCoordinate = Math.min.apply(Math, xCoordinates)
         const highestXCoordinate = Math.max.apply(Math, xCoordinates)
 
-        return Math.abs(highestXCoordinate - lowestXCoordinate)
+        return Math.abs(highestXCoordinate - lowestXCoordinate) * this.scale
     }
 
     public getHeight(): number
@@ -48,13 +56,18 @@ export class LineGroup {
         const lowestYCoordinate = Math.min.apply(Math, yCoordinates)
         const highestYCoordinate = Math.max.apply(Math, yCoordinates)
 
-        return Math.abs(highestYCoordinate - lowestYCoordinate)
+        return Math.abs(highestYCoordinate - lowestYCoordinate) * this.scale
     }
 
     // === Getter & Setter ===
     public getLines(): Line[]
     {
-        return this.lines
+        return this.lines.map(line => new Line({
+            x1: line.x1 * this.scale,
+            y1: line.y1 * this.scale,
+            x2: line.x2 * this.scale,
+            y2: line.y2 * this.scale,
+        })) 
     }
 
     public setLines(lines: Line[]): void

@@ -26,7 +26,7 @@ const coordinates = [
   [20, 40, 0, 20],
 ]
 
-const mirrorObject = LineGroup.fromCoordinates(coordinates)
+const mirrorObject = LineGroup.fromCoordinates(coordinates, { scale: 2 })
 
 // Buat object Mirror, Mirror ini (nantinya) berisi logic utama cerminnya
 const mirror = new Mirror({
