@@ -3,6 +3,7 @@ import { Line } from "./line"
 
 export interface CanvasConstructorParameters {
     canvasEl: HTMLCanvasElement
+    gridSize?: number
 }
 
 export class Canvas {
@@ -12,6 +13,8 @@ export class Canvas {
     private width: number
     private height: number
 
+    private gridSize: number
+
     private onResizeCallbacks: { [key: string]: () => void }
 
     public constructor(params: CanvasConstructorParameters)
@@ -19,6 +22,9 @@ export class Canvas {
         this.element = params.canvasEl
         this.width = window.innerWidth
         this.height = window.innerHeight 
+
+        this.gridSize = params.gridSize ?? 20
+
         this.onResizeCallbacks = {}
 
         // Context (bahasa simpelnya: 'pen' / 'pulpen' / 'brush') digunakan untuk merender line, shape, text, dll pada canvas
@@ -26,6 +32,7 @@ export class Canvas {
 
         this.fitCanvasToWindow()
         this.drawAxisLines()
+        this.drawGridLines()
 
         this.setupEvents()
     }
@@ -34,6 +41,7 @@ export class Canvas {
         window.addEventListener('resize', () => {
             this.fitCanvasToWindow()
             this.drawAxisLines()
+            this.drawGridLines()
 
             Object.values(this.onResizeCallbacks).map(callback => {
                 callback()
@@ -97,6 +105,7 @@ export class Canvas {
     {
         this.pen.clearRect(0, 0, this.width, this.height)
         this.drawAxisLines()
+        this.drawGridLines()
     }
 
     // === Getter / Setter ===
@@ -169,6 +178,37 @@ export class Canvas {
         this.setPenColor("lightgrey")
         this.drawLine(xAxisLine, 0, 0, false)
         this.drawLine(yAxisLine, 0, 0, false)
+        this.resetPenColor()
+    }
+
+    private drawGridLines(): void
+    {
+        // Vertical line - left 
+        for (let x = this.getXCenter(); x > 0; x -= this.gridSize) {
+            this.pen.moveTo(x, 0)
+            this.pen.lineTo(x, this.height)
+        }
+
+        // Vertical line - right 
+        for (let x = this.getXCenter(); x <= this.width; x += this.gridSize) {
+            this.pen.moveTo(x, 0)
+            this.pen.lineTo(x, this.height)
+        }
+
+        // Horizontal line - bottom
+        for (let y = this.getYCenter(); y > 0; y -= this.gridSize) {
+            this.pen.moveTo(0, y)
+            this.pen.lineTo(this.width, y)
+        }
+
+        // Horizontal line - bottom
+        for (let y = this.getYCenter(); y <= this.height ; y += this.gridSize) {
+            this.pen.moveTo(0, y)
+            this.pen.lineTo(this.width, y)
+        }
+
+        this.setPenColor("#00000008")
+        this.pen.stroke()
         this.resetPenColor()
     }
 
