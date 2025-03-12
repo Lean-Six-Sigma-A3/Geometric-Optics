@@ -27,6 +27,7 @@ export class Mirror {
         this.prepareControlElements()
         this.setupEvents()
         this.draw()
+        this.drawReflectedObject()
     }
 
     private prepareControlElements(): void
@@ -53,12 +54,14 @@ export class Mirror {
         Object.values(this.controlEl).forEach(control => {
             control.addEventListener('input', () => {
                 this.draw()
+                this.drawReflectedObject()
             })
         })
 
         this.canvas.onResize(() => {
             this.prepareControlElements()
             this.draw()
+            this.drawReflectedObject()
         })
     }
 
@@ -77,6 +80,20 @@ export class Mirror {
 
         this.canvas.clearCanvas()
         this.canvas.setPenColor("blue")
+        this.canvas.drawLines(this.lineGroup.getLines(), this.lineGroup.getOffsetX(), this.lineGroup.getOffsetY())
+    }
+
+    private drawReflectedObject(): void 
+    {
+        if (!this.lineGroup) {
+            return
+        }
+    
+        const distance = parseInt(this.controlEl.distance.value) - this.canvas.getWidth() / 2 
+
+        this.lineGroup.setOffset(distance, this.lineGroup.getHeight()) 
+
+        this.canvas.setPenColor("red")
         this.canvas.drawLines(this.lineGroup.getLines(), this.lineGroup.getOffsetX(), this.lineGroup.getOffsetY())
     }
 }

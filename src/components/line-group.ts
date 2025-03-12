@@ -59,6 +59,18 @@ export class LineGroup {
         return Math.abs(highestYCoordinate - lowestYCoordinate) * this.scale
     }
 
+    public cloneObject(): LineGroup {
+        return new LineGroup(
+            this.lines.map(line => new Line({
+                x1: line.x1,
+                y1: line.y1,
+                x2: line.x2,
+                y2: line.y2,
+            })),
+            { offsetX: this.offsetX, offsetY: this.offsetY, scale: this.scale }
+        );
+    }
+
     // === Getter & Setter ===
     public getLines(): Line[]
     {
