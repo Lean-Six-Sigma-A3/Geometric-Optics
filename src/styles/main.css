@@ -24,19 +24,27 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
-}
-
-#canvas {
-  border: 2px solid slategray;
+  position: relative;
 }
 
 .controls {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  min-width: 18rem;
+
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  padding: 0.5rem;
+
+  border: 1px grey solid;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem 0.05rem #00000030;
 }
 
 .control-input-section {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
