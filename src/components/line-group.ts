@@ -100,4 +100,14 @@ export class LineGroup {
     {
         this.offsetY = value
     }
+
+    public getScale(): number
+    {
+        return this.scale
+    }
+
+    public setScale(scale: number): void
+    {
+        this.scale = scale
+    }
 }

@@ -10,6 +10,7 @@ export interface MirrorConstructorParameters {
 
 export interface MirrorControlElements {
     distance: HTMLInputElement
+    scale: HTMLInputElement
 }
 
 export class Mirror {
@@ -28,11 +29,31 @@ export class Mirror {
         this.draw()
     }
 
+    private prepareControlElements(): void
+    {
+        const maxDistance = this.canvas.getWidth() / 2 - (this.lineGroup?.getWidth() ?? 0)
+
+        // Atur range min & max dari input slider
+        this.controlEl.distance.max = maxDistance.toString() 
+        this.controlEl.distance.min = "0"
+
+        this.controlEl.scale.value = this.lineGroup?.getScale().toString() ?? "1"
+        this.controlEl.scale.max = "4"
+        this.controlEl.scale.min = "1"
+    }
+
     private setupEvents(): void
     {
-        // Render ulang canvas setiap slider digeser
-        this.controlEl.distance.addEventListener('input', () => {
-            this.draw()
+        // Ubah nilai skala ketika slider skala digeser
+        this.controlEl.scale.addEventListener('input', () => {
+            this.lineGroup?.setScale(parseInt(this.controlEl.scale.value))
+        })
+
+        // Render ulang canvas salah satu slider digeser
+        Object.values(this.controlEl).forEach(control => {
+            control.addEventListener('input', () => {
+                this.draw()
+            })
         })
 
         this.canvas.onResize(() => {
@@ -57,14 +78,5 @@ export class Mirror {
         this.canvas.clearCanvas()
         this.canvas.setPenColor("blue")
         this.canvas.drawLines(this.lineGroup.getLines(), this.lineGroup.getOffsetX(), this.lineGroup.getOffsetY())
-    }
-
-    private prepareControlElements(): void
-    {
-        const maxDistance = this.canvas.getWidth() / 2 - (this.lineGroup?.getWidth() ?? 0)
-
-        // Atur range min & max dari input slider
-        this.controlEl.distance.max = maxDistance.toString() 
-        this.controlEl.distance.min = "0"
     }
 }

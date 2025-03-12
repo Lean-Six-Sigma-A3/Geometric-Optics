@@ -26,13 +26,14 @@ const coordinates = [
   [20, 40, 0, 20],
 ]
 
-const mirrorObject = LineGroup.fromCoordinates(coordinates, { scale: 2 })
+const mirrorObject = LineGroup.fromCoordinates(coordinates)
 
 // Buat object Mirror, Mirror ini (nantinya) berisi logic utama cerminnya
 const mirror = new Mirror({
   canvas: canvas,
   mirrorObject: mirrorObject,
   controlEl: {
-    distance: document.querySelector<HTMLInputElement>('#distance')!
+    distance: document.querySelector<HTMLInputElement>('#distance')!,
+    scale: document.querySelector<HTMLInputElement>('#scale')!,
   }
 })
