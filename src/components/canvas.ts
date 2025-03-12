@@ -113,6 +113,14 @@ export class Canvas {
         this.pen.fill()
     }
 
+    public drawCircle(x: number, y: number, radius: number): void
+    {
+        this.pen.beginPath()
+        this.pen.arc(x + this.getXCenter(), y + this.getYCenter(), radius, 0, 2 * Math.PI)
+        this.pen.closePath()
+        this.pen.stroke()
+    }
+
     public clearCanvas(): void
     {
         this.pen.clearRect(0, 0, this.width, this.height)

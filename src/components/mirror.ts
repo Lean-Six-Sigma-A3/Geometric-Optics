@@ -9,19 +9,20 @@ export interface MirrorConstructorParameters {
 }
 
 export interface MirrorControlElements {
-    objectX: HTMLInputElement
     scale: HTMLInputElement
+    objectX: HTMLInputElement
+    focalDistance: HTMLInputElement
 }
 
 export class Mirror {
     private canvas: Canvas
-    private lineGroup: LineGroup
+    private object: LineGroup
     private controlEl: MirrorControlElements
 
     public constructor(params: MirrorConstructorParameters)
     {
         this.canvas = params.canvas
-        this.lineGroup = params.mirrorObject
+        this.object = params.mirrorObject
         this.controlEl = params.controlEl
 
         this.prepareControlElements()
@@ -32,21 +33,25 @@ export class Mirror {
     private prepareControlElements(): void
     {
         // Atur range min & max dari input slider
-        this.controlEl.objectX.max = (this.canvas.getWidth() / 2).toString()
-        this.controlEl.objectX.min = (-this.canvas.getWidth() / 2).toString()
-        this.controlEl.objectX.value = this.lineGroup.getX().toString()
-
         this.controlEl.scale.max = "4"
         this.controlEl.scale.min = "1"
         this.controlEl.scale.step = "0.01"
-        this.controlEl.scale.value = this.lineGroup?.getScale().toString() ?? "1"
+        this.controlEl.scale.value = this.object.getScale().toString()
+
+        this.controlEl.objectX.max = (this.canvas.getWidth() / 2).toString()
+        this.controlEl.objectX.min = (-this.canvas.getWidth() / 2).toString()
+        this.controlEl.objectX.value = this.object.getX().toString()
+
+        this.controlEl.focalDistance.max = (this.canvas.getWidth() / 2).toString()
+        this.controlEl.focalDistance.min = (-this.canvas.getWidth() / 2).toString()
+        this.controlEl.focalDistance.value = "-200"
     }
 
     private setupEvents(): void
     {
         // Ubah nilai skala ketika slider skala digeser
         this.controlEl.scale.addEventListener('input', () => {
-            this.lineGroup?.setScale(parseFloat(this.controlEl.scale.value))
+            this.object.setScale(parseFloat(this.controlEl.scale.value))
         })
 
         // Render ulang canvas salah satu slider digeser
@@ -64,17 +69,69 @@ export class Mirror {
 
     private draw(): void
     {
+        this.canvas.clearCanvas()
+        this.drawObject()
+        this.drawFocalPoint()
+        this.drawReflection()
+    }
+
+    private drawObject(): void
+    {
         // Skip render jika line group masih kosong
-        if (!this.lineGroup) {
+        if (!this.object) {
             return
         }
 
-        const posX = parseFloat(this.controlEl.objectX.value)
+        this.object.setX(this.getObjectDistance())
 
-        this.lineGroup.setX(posX)
+        this.object.setColor("blue")
+        this.canvas.drawLineGroup(this.object)
+    }
 
-        this.canvas.clearCanvas()
-        this.lineGroup.setColor("blue")
-        this.canvas.drawLineGroup(this.lineGroup)
+    private drawReflection(): void
+    {
+        const reflection = this.object.clone()
+        reflection.setX(this.getReflectionDistance())
+        reflection.setY(this.getReflectionHeight())
+        reflection.setScale(this.getMagnificationScale() * reflection.getScale())
+        reflection.setColor("red")
+
+        this.canvas.drawLineGroup(reflection)
+    }
+
+    private drawFocalPoint(): void
+    {
+        this.canvas.drawCircle(this.getFocalDistance(), 0, 4)
+        this.canvas.drawCircle(this.getFocalDistance() * 2, 0, 4)
+    }
+
+    private getObjectDistance(): number
+    {
+        return parseFloat(this.controlEl.objectX.value)
+    }
+
+    private getObjectHeight(): number
+    {
+        return this.object.getY()
+    }
+
+    private getFocalDistance(): number
+    {
+        return parseFloat(this.controlEl.focalDistance.value)
+    }
+
+    private getReflectionDistance(): number
+    {
+        return 1 / (1 / this.getFocalDistance() - 1 / this.getObjectDistance())
+    }
+
+    private getReflectionHeight(): number
+    {
+        return this.getObjectHeight() * this.getMagnificationScale()
+    }
+    
+    public getMagnificationScale(): number
+    {
+        return -this.getReflectionDistance() / this.getObjectDistance()
     }
 }

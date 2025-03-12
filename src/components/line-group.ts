@@ -102,9 +102,9 @@ export class LineGroup {
         return highestYCoordinate - centerHeightY
     }
 
-    public cloneObject(): LineGroup {
+    public clone(): LineGroup {
         return new LineGroup(
-            this.lines.map(line => new Line({
+            this.originalLines.map(line => new Line({
                 x1: line.x1,
                 y1: line.y1,
                 x2: line.x2,

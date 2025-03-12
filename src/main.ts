@@ -26,13 +26,6 @@ const coordinates = [
   [-35, 0, -55, 20],
 ]
 
-// const coordinates = [
-//   [-50, 70, 50, 50],
-//   [50, 50, 50, -50],
-//   [50, -50, -50, -50],
-//   [-50, -50, -50, 70],
-// ]
-
 const mirrorObject = LineGroup.fromCoordinates(coordinates, { x: -100, y: 50, scale: 1 })
 
 // Buat object Mirror, Mirror ini (nantinya) berisi logic utama cerminnya
@@ -42,5 +35,6 @@ const mirror = new Mirror({
   controlEl: {
     objectX: document.querySelector<HTMLInputElement>('#distance')!,
     scale: document.querySelector<HTMLInputElement>('#scale')!,
+    focalDistance: document.querySelector<HTMLInputElement>('#focal-distance')!,
   }
 })
