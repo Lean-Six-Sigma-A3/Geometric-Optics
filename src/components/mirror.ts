@@ -34,6 +34,11 @@ export class Mirror {
         this.controlEl.distance.addEventListener('input', () => {
             this.draw()
         })
+
+        this.canvas.onResize(() => {
+            this.prepareControlElements()
+            this.draw()
+        })
     }
 
     private draw(): void
@@ -44,7 +49,7 @@ export class Mirror {
         }
 
         // Jarak objek (line group) dari cermin, dengan asumsi cermin berada di tengah-tengah canvas.
-        const distance = parseInt(this.controlEl.distance.value) - this.canvas.width / 2 
+        const distance = parseInt(this.controlEl.distance.value) - this.canvas.getWidth() / 2 
 
         // Pastikan koordinat Y terkecil dalam line group adalah 0, agar tidak bug
         this.lineGroup.setOffset(distance, -this.lineGroup.getHeight()) 
@@ -56,7 +61,7 @@ export class Mirror {
 
     private prepareControlElements(): void
     {
-        const maxDistance = this.canvas.width / 2 - (this.lineGroup?.getWidth() ?? 0)
+        const maxDistance = this.canvas.getWidth() / 2 - (this.lineGroup?.getWidth() ?? 0)
 
         // Atur range min & max dari input slider
         this.controlEl.distance.max = maxDistance.toString() 

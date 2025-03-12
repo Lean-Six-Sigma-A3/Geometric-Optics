@@ -10,8 +10,6 @@ const canvasEl = document.querySelector<HTMLCanvasElement>('#canvas')!
 // Buat object dari class Canvas
 const canvas = new Canvas({
   canvasEl: canvasEl,
-  width: 800,
-  height: 600,
 })
 
 // Parsing koordinat menjadi object Line (untuk ditampilkan)

@@ -1,31 +1,52 @@
+import { randomString } from "../utils/string"
 import { Line } from "./line"
 
 export interface CanvasConstructorParameters {
     canvasEl: HTMLCanvasElement
-    width: number
-    height: number
 }
 
 export class Canvas {
     private element: HTMLCanvasElement
     private pen: CanvasRenderingContext2D
 
-    public width: number
-    public height: number
+    private width: number
+    private height: number
+
+    private onResizeCallbacks: { [key: string]: () => void }
 
     public constructor(params: CanvasConstructorParameters)
     {
         this.element = params.canvasEl
-        this.width = params.width
-        this.height = params.height
-
-        this.element.width = this.width
-        this.element.height = this.height
+        this.width = window.innerWidth
+        this.height = window.innerHeight 
+        this.onResizeCallbacks = {}
 
         // Context (bahasa simpelnya: 'pen' / 'pulpen' / 'brush') digunakan untuk merender line, shape, text, dll pada canvas
         this.pen = this.element.getContext("2d")!
 
+        this.fitCanvasToWindow()
         this.drawAxisLines()
+
+        this.setupEvents()
+    }
+
+    private setupEvents(): void {
+        window.addEventListener('resize', () => {
+            this.fitCanvasToWindow()
+            this.drawAxisLines()
+
+            Object.values(this.onResizeCallbacks).map(callback => {
+                callback()
+            })
+        })
+    }
+
+    private fitCanvasToWindow(): void {
+        this.width = window.innerWidth
+        this.height = window.innerHeight 
+
+        this.element.width = this.width
+        this.element.height = this.height
     }
 
     // === Utama ===
@@ -87,6 +108,34 @@ export class Canvas {
     public getPen(): CanvasRenderingContext2D
     {
         return this.pen
+    }
+
+    public getWidth(): number
+    {
+        return this.width
+    }
+
+    public getHeight(): number
+    {
+        return this.width
+    }
+
+    public onResize(callback: () => void): string
+    {
+        const id = randomString()
+        this.onResizeCallbacks[id] = callback
+
+        return id
+    }
+
+    public getOnResizeCallbacks(): { [key: string]: () => void }
+    {
+        return this.onResizeCallbacks
+    }
+
+    public clearOnResizeCallbacks(): void
+    {
+        this.onResizeCallbacks = {}
     }
 
     // === Helpers ===
