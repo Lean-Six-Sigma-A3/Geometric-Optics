@@ -33,7 +33,7 @@ const coordinates = [
 //   [-50, -50, -50, 70],
 // ]
 
-const mirrorObject = LineGroup.fromCoordinates(coordinates, { x: 0, y: 0, scale: 2 })
+const mirrorObject = LineGroup.fromCoordinates(coordinates, { x: 0, y: 0, scale: 1 })
 
 // Buat object Mirror, Mirror ini (nantinya) berisi logic utama cerminnya
 const mirror = new Mirror({

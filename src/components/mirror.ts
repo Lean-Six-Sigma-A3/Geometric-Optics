@@ -32,19 +32,21 @@ export class Mirror {
     private prepareControlElements(): void
     {
         // Atur range min & max dari input slider
-        this.controlEl.objectX.max = (this.canvas.getWidth() / 4).toString()
-        this.controlEl.objectX.min = (-this.canvas.getWidth() / 4).toString()
+        this.controlEl.objectX.value = "0" 
+        this.controlEl.objectX.max = (this.canvas.getWidth() / 2).toString()
+        this.controlEl.objectX.min = (-this.canvas.getWidth() / 2).toString()
 
         this.controlEl.scale.value = this.lineGroup?.getScale().toString() ?? "1"
         this.controlEl.scale.max = "4"
         this.controlEl.scale.min = "1"
+        this.controlEl.scale.step = "0.01"
     }
 
     private setupEvents(): void
     {
         // Ubah nilai skala ketika slider skala digeser
         this.controlEl.scale.addEventListener('input', () => {
-            this.lineGroup?.setScale(parseInt(this.controlEl.scale.value))
+            this.lineGroup?.setScale(parseFloat(this.controlEl.scale.value))
         })
 
         // Render ulang canvas salah satu slider digeser
@@ -67,7 +69,7 @@ export class Mirror {
             return
         }
 
-        const posX = parseInt(this.controlEl.objectX.value)
+        const posX = parseFloat(this.controlEl.objectX.value)
 
         this.lineGroup.setX(posX)
 

@@ -51,10 +51,10 @@ export class LineGroup {
         // Sumbu y di-flip biar nilai positif arahnya ke atas
         // Lihat: https://www.w3schools.com/graphics/canvas_coordinates.asp
         return lines.map(line => new Line({
-            x1: (line.x1 + this.x) * this.scale,
-            y1: -(line.y1 + this.y) * this.scale,
-            x2: (line.x2 + this.x) * this.scale,
-            y2: -(line.y2 + this.y) * this.scale,
+            x1: (line.x1) * this.scale  + this.x,
+            y1: -(line.y1) * this.scale + this.y,
+            x2: (line.x2) * this.scale + this.x,
+            y2: -(line.y2) * this.scale + this.y,
         })) 
     }
 
