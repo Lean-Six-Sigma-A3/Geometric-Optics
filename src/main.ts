@@ -33,7 +33,8 @@ const mirror = new Mirror({
   canvas: canvas,
   mirrorObject: mirrorObject,
   controlEl: {
-    objectX: document.querySelector<HTMLInputElement>('#distance')!,
+    objectX: document.querySelector<HTMLInputElement>('#pos-x')!,
+    objectY: document.querySelector<HTMLInputElement>('#pos-y')!,
     scale: document.querySelector<HTMLInputElement>('#scale')!,
     focalDistance: document.querySelector<HTMLInputElement>('#focal-distance')!,
   }

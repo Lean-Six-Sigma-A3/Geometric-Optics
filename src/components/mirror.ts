@@ -11,6 +11,7 @@ export interface MirrorConstructorParameters {
 export interface MirrorControlElements {
     scale: HTMLInputElement
     objectX: HTMLInputElement
+    objectY: HTMLInputElement
     focalDistance: HTMLInputElement
 }
 
@@ -44,6 +45,10 @@ export class Mirror {
         this.controlEl.objectX.min = (-this.canvas.getWidth() / 2).toString()
         this.controlEl.objectX.value = this.object.getX().toString()
 
+        this.controlEl.objectY.max = (this.canvas.getHeight() / 2).toString()
+        this.controlEl.objectY.min = (-this.canvas.getHeight() / 2).toString()
+        this.controlEl.objectY.value = this.object.getY().toString()
+
         this.controlEl.focalDistance.max = (this.canvas.getWidth() / 2).toString()
         this.controlEl.focalDistance.min = (-this.canvas.getWidth() / 2).toString()
         this.controlEl.focalDistance.value = "-200"
@@ -60,6 +65,8 @@ export class Mirror {
         Object.values(this.controlEl).forEach(control => {
             control.addEventListener('input', () => {
                 this.draw()
+        console.log(this.canvas.getHeight() / 2, this.controlEl.objectY.value)
+        // console.log(this.canvas.getWidth() / 2, this.controlEl.objectX.value)
             })
         })
 
@@ -86,6 +93,7 @@ export class Mirror {
         }
 
         this.object.setX(this.getObjectDistance())
+        this.object.setY(this.getObjectHeight())
 
         this.object.setColor("blue")
         this.canvas.drawLineGroup(this.object, true)
@@ -169,7 +177,7 @@ export class Mirror {
 
     private getObjectHeight(): number
     {
-        return this.object.getY()
+        return parseFloat(this.controlEl.objectY.value)
     }
 
     private getFocalDistance(): number

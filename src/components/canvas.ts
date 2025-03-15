@@ -148,7 +148,7 @@ export class Canvas {
 
     public getHeight(): number
     {
-        return this.width
+        return this.height
     }
 
     public onResize(callback: () => void): string
@@ -221,7 +221,7 @@ export class Canvas {
             this.pen.lineTo(this.width, y)
         }
 
-        this.setPenColor("#00000008")
+        this.setPenColor("#00000018")
         this.pen.stroke()
         this.resetPenColor()
     }
