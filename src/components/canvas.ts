@@ -118,7 +118,7 @@ export class Canvas {
         this.pen.beginPath()
         this.pen.arc(x + this.getXCenter(), y + this.getYCenter(), radius, 0, 2 * Math.PI)
         this.pen.closePath()
-        this.pen.stroke()
+        this.pen.fill()
     }
 
     public clearCanvas(): void
@@ -227,10 +227,12 @@ export class Canvas {
     public setPenColor(color: string): void
     {
         this.pen.strokeStyle = color
+        this.pen.fillStyle = color
     }
 
-    private resetPenColor(): void
+    public resetPenColor(): void
     {
         this.pen.strokeStyle = "#000000"
+        this.pen.fillStyle = "#000000"
     }
 }

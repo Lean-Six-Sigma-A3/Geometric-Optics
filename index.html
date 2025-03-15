@@ -11,22 +11,38 @@
     <main class="wrapper">
       <canvas id="canvas"></canvas>
 
-      <div class="controls">
-        <section class="control-input-section">
+      <section class="legends">
+        <div class="legend">
+          <span class="line line__blue"></span>
+          <span>Objek</span>
+        </div>
+        <div class="legend">
+          <span class="line line__red"></span>
+          <span>Bayangan</span>
+        </div>
+
+        <div class="legend">
+          <span class="dot dot__green"></span>
+          <span>Titik Fokus</span>
+        </div>
+      </section>
+
+      <section class="controls">
+        <div class="control-input-section">
           <label for="scale">Skala Objek</label>
           <input type="range" id="scale">
-        </section>
+        </div>
 
-        <section class="control-input-section">
+        <div class="control-input-section">
           <label for="distance">Posisi</label>
           <input type="range" id="distance">
-        </section>
+        </div>
 
-        <section class="control-input-section">
+        <div class="control-input-section">
           <label for="focal-distance">Titik Fokus</label>
           <input type="range" id="focal-distance">
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
 
     <script type="module" src="/src/main.ts"></script>

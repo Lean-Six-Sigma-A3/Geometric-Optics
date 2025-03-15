@@ -101,8 +101,9 @@ export class Mirror {
 
     private drawFocalPoint(): void
     {
+        this.canvas.setPenColor("green")
         this.canvas.drawCircle(this.getFocalDistance(), 0, 4)
-        this.canvas.drawCircle(this.getFocalDistance() * 2, 0, 4)
+        this.canvas.resetPenColor()
     }
 
     private getObjectDistance(): number
