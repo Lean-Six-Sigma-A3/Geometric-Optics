@@ -74,6 +74,18 @@ body {
   border: 1px solid red;
 }
 
+.line__yellow {
+  border: 1px solid #FFA725;
+}
+
+.line__green {
+  border: 1px solid #034C53;
+}
+
+.line__dashed__black {
+  border: 1px solid #000000;
+}
+
 .dot {
   width: .5rem;
   height: .5rem;

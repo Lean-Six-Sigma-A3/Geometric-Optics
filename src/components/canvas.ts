@@ -84,7 +84,7 @@ export class Canvas {
         this.pen.stroke()
     }
 
-    public drawLineGroup(lineGroup: LineGroup): void
+    public drawLineGroup(lineGroup: LineGroup, withCenterIndicator: boolean = false): void
     {
         // Mulai path untuk garis
         this.pen.beginPath()
@@ -107,10 +107,12 @@ export class Canvas {
         this.setPenColor(lineGroup.getColor())
         this.pen.stroke()
 
-        this.pen.beginPath()
-        this.pen.arc(lineGroup.getCenterX() + this.getXCenter(), lineGroup.getCenterY() + this.getYCenter(), 4, 0, 2 * Math.PI)
-        this.pen.closePath()
-        this.pen.fill()
+        if (withCenterIndicator) {
+            this.pen.beginPath()
+            this.pen.arc(lineGroup.getCenterX() + this.getXCenter(), lineGroup.getCenterY() + this.getYCenter(), 4, 0, 2 * Math.PI)
+            this.pen.closePath()
+            this.pen.fill()
+        }
     }
 
     public drawCircle(x: number, y: number, radius: number): void

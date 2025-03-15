@@ -17,12 +17,14 @@ export interface MirrorControlElements {
 export class Mirror {
     private canvas: Canvas
     private object: LineGroup
+    private reflection: LineGroup
     private controlEl: MirrorControlElements
 
     public constructor(params: MirrorConstructorParameters)
     {
         this.canvas = params.canvas
         this.object = params.mirrorObject
+        this.reflection = this.object.clone()
         this.controlEl = params.controlEl
 
         this.prepareControlElements()
@@ -70,8 +72,9 @@ export class Mirror {
     private draw(): void
     {
         this.canvas.clearCanvas()
-        this.drawObject()
+        this.drawLightRays()
         this.drawFocalPoint()
+        this.drawObject()
         this.drawReflection()
     }
 
@@ -85,18 +88,18 @@ export class Mirror {
         this.object.setX(this.getObjectDistance())
 
         this.object.setColor("blue")
-        this.canvas.drawLineGroup(this.object)
+        this.canvas.drawLineGroup(this.object, true)
     }
 
     private drawReflection(): void
     {
-        const reflection = this.object.clone()
-        reflection.setX(this.getReflectionDistance())
-        reflection.setY(this.getReflectionHeight())
-        reflection.setScale(this.getMagnificationScale() * reflection.getScale())
-        reflection.setColor("red")
+        this.reflection = this.object.clone()
+        this.reflection.setX(this.getReflectionDistance())
+        this.reflection.setY(this.getReflectionHeight())
+        this.reflection.setScale(this.getMagnificationScale() * this.reflection.getScale())
+        this.reflection.setColor("red")
 
-        this.canvas.drawLineGroup(reflection)
+        this.canvas.drawLineGroup(this.reflection, true)
     }
 
     private drawFocalPoint(): void
@@ -105,6 +108,59 @@ export class Mirror {
         this.canvas.drawCircle(this.getFocalDistance(), 0, 4)
         this.canvas.resetPenColor()
     }
+
+    private drawLightRays(): void
+    {
+        const objectTopRays = [
+            [
+                this.getObjectDistance(),
+                this.getObjectHeight(),
+                0,
+                this.getObjectHeight(),
+            ],
+            [
+                0,
+                this.getObjectHeight(),
+                this.getReflectionDistance(),
+                this.getReflectionHeight(),
+            ],
+        ]
+
+        const objectBottomRays = [
+            [
+                this.getObjectDistance(),
+                this.getObjectHeight(),
+                0,
+                this.getReflectionHeight(),
+            ],
+            [
+                0,
+                this.getReflectionHeight(),
+                this.getReflectionDistance(),
+                this.getReflectionHeight(),
+            ],
+        ]
+
+        const heightLines = [
+            [
+                this.getObjectDistance(),
+                0,
+                this.getObjectDistance(),
+                this.getObjectHeight(),
+            ],
+            [
+                this.getReflectionDistance(),
+                0,
+                this.getReflectionDistance(),
+                this.getReflectionHeight(),
+            ],
+        ]
+
+        this.canvas.drawLineGroup(LineGroup.fromCoordinates(objectTopRays, { color: "#FFA725" }))
+        this.canvas.drawLineGroup(LineGroup.fromCoordinates(objectBottomRays, { color: "#034C53" }))
+        this.canvas.drawLineGroup(LineGroup.fromCoordinates(heightLines))
+    }
+
 
     private getObjectDistance(): number
     {
