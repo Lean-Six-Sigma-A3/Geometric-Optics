@@ -100,10 +100,10 @@ export class Mirror {
 
         this.object.setX(this.getObjectDistance())
         this.object.setY(this.getObjectHeight())
-
         this.object.setColor("blue")
-        this.canvas.drawText("Object" ,this.getObjectDistance(), this.getObjectHeight(), 15, "12px Arial")
+        
         this.canvas.drawLineGroup(this.object, true)
+        this.canvas.drawText("Object" ,this.getObjectDistance(), -6, "12px Arial", "blue")
     }
 
     private drawReflection(): void
@@ -118,7 +118,7 @@ export class Mirror {
 
         // Add reflection label
         this.canvas.setPenColor("red")
-        this.canvas.drawText("Bayangan", this.getReflectionDistance(), this.getReflectionHeight() - 15, "12px Arial")
+        this.canvas.drawText("Bayangan", this.getReflectionDistance(), -6, "12px Arial", "red")
         this.canvas.resetPenColor()
     }
 
@@ -126,7 +126,7 @@ export class Mirror {
     {
         this.canvas.setPenColor("green")
         this.canvas.drawCircle(this.getFocalDistance(), 0, 4)
-        this.canvas.drawText(`F (${this.getFocalDistance()})`, this.getFocalDistance(), 15, "12px Arial")
+        this.canvas.drawText(`F (${this.getFocalDistance()})`, this.getFocalDistance(), 15, "12px Arial", "green")
         this.canvas.resetPenColor()
     }
 
@@ -182,6 +182,14 @@ export class Mirror {
         this.canvas.drawLineGroup(LineGroup.fromCoordinates(heightLines))
     }
 
+    public updateObject(newObject: LineGroup): void
+    {
+        this.object = newObject;
+        this.reflection = this.object.clone();
+        this.draw();
+    }
+
+    // --- Getter ---
 
     private getObjectDistance(): number
     {
@@ -212,12 +220,4 @@ export class Mirror {
     {
         return -this.getReflectionDistance() / this.getObjectDistance()
     }
-
-
-    public updateObject(newObject: LineGroup): void {
-        this.object = newObject;
-        this.reflection = this.object.clone();
-        this.draw();
-    }
-
 }

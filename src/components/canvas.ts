@@ -123,6 +123,17 @@ export class Canvas {
         this.pen.fill()
     }
 
+    public drawText(text: string, x: number, y: number, font: string = '12px Arial', color: string = 'black', align: CanvasTextAlign = 'center'): void
+    {
+        this.setPenColor(color)
+        this.pen.font = font;
+        this.pen.textAlign = align;
+
+        this.pen.fillText(text, x + this.getXCenter(), y + this.getYCenter());
+
+        this.resetPenColor()
+    }
+
     public clearCanvas(): void
     {
         this.pen.clearRect(0, 0, this.width, this.height)
@@ -247,12 +258,5 @@ export class Canvas {
     {
         this.pen.strokeStyle = "#000000"
         this.pen.fillStyle = "#000000"
-    }
-
-    public drawText(text: string, x: number, y: number, font: string = '12px Arial', align: CanvasTextAlign = 'center'): void
-    {
-        this.pen.font = font;
-        this.pen.textAlign = align;
-        this.pen.fillText(text, x + this.getXCenter(), y + this.getYCenter());
     }
 }
