@@ -46,10 +46,6 @@ let mirrorObject = LineGroup.fromCoordinates(
   
 );
 
-controlElements.objectX.value = presetData[currentPreset].defaultX.toString();
-controlElements.objectY.value = presetData[currentPreset].defaultY.toString();
-controlElements.scale.value = presetData[currentPreset].defaultScale.toString();
-
 
 // Buat object Mirror, Mirror ini (nantinya) berisi logic utama cerminnya
 const mirror = new Mirror({
@@ -57,6 +53,7 @@ const mirror = new Mirror({
   mirrorObject: mirrorObject,
   controlEl: controlElements
 });
+mirror.updateScaleMinimum(presetData[currentPreset].defaultScale);
 
 //update minimum scale for each model
 
@@ -72,7 +69,7 @@ presetSelector.addEventListener('change', () => {
   
   controlElements.objectX.value = defaultX.toString();
   controlElements.objectY.value = defaultY.toString();
-
+  controlElements.scale.value = defaultScale.toString();
   // Update mirror object with new preset
   mirrorObject = LineGroup.fromCoordinates(
     presetData[currentPreset].coordinates,
