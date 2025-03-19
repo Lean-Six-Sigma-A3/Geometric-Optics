@@ -1,7 +1,7 @@
 import { Canvas } from './components/canvas'
 import { LineGroup } from './components/line-group'
 import { Mirror } from './components/mirror'
-import { presetCoordinates, PresetKey } from './presets/coordinates.ts'
+import { presetData, PresetKey } from './presets/coordinates.ts'
 
 import './styles/main.css'
 
@@ -10,7 +10,7 @@ const canvasEl = document.querySelector<HTMLCanvasElement>('#canvas')!
 const presetSelector = document.querySelector<HTMLSelectElement>('#model-preset')!
 
 // Populate preset selector
-Object.keys(presetCoordinates).forEach(preset => {
+Object.keys(presetData).forEach(preset => {
   const option = document.createElement('option');
   option.value = preset;
   option.textContent = preset.charAt(0).toUpperCase() + preset.slice(1); // Capitalize first letter
@@ -37,9 +37,18 @@ let currentPreset: PresetKey = 'cyberTruck';
 presetSelector.value = currentPreset;
 
 let mirrorObject = LineGroup.fromCoordinates(
-  presetCoordinates[currentPreset],
-  { x: -100, y: 50, scale: 1 }
+  presetData[currentPreset].coordinates,
+  {
+    x: presetData[currentPreset].defaultX, 
+    y: presetData[currentPreset].defaultY, 
+    scale: presetData[currentPreset].defaultScale 
+  }
+  
 );
+
+controlElements.objectX.value = presetData[currentPreset].defaultX.toString();
+controlElements.objectY.value = presetData[currentPreset].defaultY.toString();
+controlElements.scale.value = presetData[currentPreset].defaultScale.toString();
 
 // Buat object Mirror, Mirror ini (nantinya) berisi logic utama cerminnya
 const mirror = new Mirror({
@@ -51,13 +60,24 @@ const mirror = new Mirror({
 presetSelector.addEventListener('change', () => {
   currentPreset = presetSelector.value as PresetKey;
   
+
+  // get preset's default values
+  const defaultX = presetData[currentPreset].defaultX;
+  const defaultY = presetData[currentPreset].defaultY;
+  const defaultScale = presetData[currentPreset].defaultScale;
+
+  
+  controlElements.objectX.value = defaultX.toString();
+  controlElements.objectY.value = defaultY.toString();
+  controlElements.scale.value = defaultScale.toString();
+
   // Update mirror object with new preset
   mirrorObject = LineGroup.fromCoordinates(
-    presetCoordinates[currentPreset], 
+    presetData[currentPreset].coordinates,
     { 
-      x: parseFloat(controlElements.objectX.value), 
-      y: parseFloat(controlElements.objectY.value), 
-      scale: parseFloat(controlElements.scale.value) 
+      x: defaultX,
+      y: defaultY,
+      scale: defaultScale
     }
   );
   
