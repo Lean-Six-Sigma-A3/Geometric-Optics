@@ -1,6 +1,7 @@
 import { Canvas } from './components/canvas'
 import { LineGroup } from './components/line-group'
 import { Mirror } from './components/mirror'
+import { presetCoordinates, PresetKey } from './presets/coordinates.ts'
 
 import './styles/main.css'
 
@@ -14,17 +15,8 @@ const canvas = new Canvas({
 
 // Parsing koordinat menjadi object Line (untuk ditampilkan)
 // [x1, y1, x2, y2]
-const coordinates = [
-  [5, -40, 55, 40],
-  [-15, -20, 55, 40],
-  [-35, 0, 55, 40],
-  [-55, 20, 55, 40],
-  [5, -40, -15, -20],
-  [-15, -20, -30, -35],
-  [-30, -35, -10, -25],
-  [-30, -35, -35, 0],
-  [-35, 0, -55, 20],
-]
+const currentPreset: PresetKey = 'cyberTruck';
+const coordinates = presetCoordinates[currentPreset];
 
 const mirrorObject = LineGroup.fromCoordinates(coordinates, { x: -100, y: 50, scale: 1 })
 

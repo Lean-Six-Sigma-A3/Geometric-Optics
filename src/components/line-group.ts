@@ -17,8 +17,7 @@ export class LineGroup {
 
     private color: string
 
-    public constructor(lines: Line[], options?: LineGroupOptions)
-    {
+    public constructor(lines: Line[], options?: LineGroupOptions) {
         this.x = options?.x ?? 0
         this.y = options?.y ?? 0
         this.scale = options?.scale ?? 1
@@ -30,8 +29,7 @@ export class LineGroup {
 
     // === Parser ===
     // Parse Line dari array koordinat yang diberikan
-    public static fromCoordinates(coordinates: number[][], options?: LineGroupOptions): LineGroup
-    {
+    public static fromCoordinates(coordinates: number[][], options?: LineGroupOptions): LineGroup {
         if (!coordinates.every(coordinate => coordinate.length === 4)) {
             throw new Error("Data garis tidak valid!")
         }
@@ -51,15 +49,14 @@ export class LineGroup {
         // Sumbu y di-flip biar nilai positif arahnya ke atas
         // Lihat: https://www.w3schools.com/graphics/canvas_coordinates.asp
         return lines.map(line => new Line({
-            x1: line.x1 * this.scale  + this.x,
+            x1: line.x1 * this.scale + this.x,
             y1: -line.y1 * this.scale - this.y,
             x2: line.x2 * this.scale + this.x,
             y2: -line.y2 * this.scale - this.y,
-        })) 
+        }))
     }
 
-    public getWidth(): number
-    {
+    public getWidth(): number {
         const xCoordinates = this.lines.flatMap(line => [line.x1, line.x2])
 
         const lowestXCoordinate = Math.min.apply(Math, xCoordinates)
@@ -68,8 +65,7 @@ export class LineGroup {
         return Math.abs(highestXCoordinate - lowestXCoordinate)
     }
 
-    public getHeight(): number
-    {
+    public getHeight(): number {
         const yCoordinates = this.lines.flatMap(line => [line.y1, line.y2])
 
         const lowestYCoordinate = Math.min.apply(Math, yCoordinates)
@@ -78,8 +74,7 @@ export class LineGroup {
         return Math.abs(highestYCoordinate - lowestYCoordinate)
     }
 
-    public getCenterX(): number
-    {
+    public getCenterX(): number {
         const xCoordinates = this.lines.flatMap(line => [line.x1, line.x2])
 
         const lowestXCoordinate = Math.min.apply(Math, xCoordinates)
@@ -90,8 +85,7 @@ export class LineGroup {
         return highestXCoordinate - centerHeightX
     }
 
-    public getCenterY(): number
-    {
+    public getCenterY(): number {
         const yCoordinates = this.lines.flatMap(line => [line.y1, line.y2])
 
         const lowestYCoordinate = Math.min.apply(Math, yCoordinates)
@@ -115,67 +109,56 @@ export class LineGroup {
     }
 
     // === Getter & Setter ===
-    public getLines(): Line[]
-    {
+    public getLines(): Line[] {
         return this.lines
     }
 
-    public setLines(value: Line[])
-    {
+    public setLines(value: Line[]) {
         this.lines = value
     }
 
-    public setPosition(x: number, y: number): void
-    {
+    public setPosition(x: number, y: number): void {
         this.x = x
         this.y = y
 
         this.lines = this.calculateLines(this.originalLines)
     }
 
-    public getX(): number
-    {
+    public getX(): number {
         return this.x
     }
 
-    public setX(value: number): void
-    {
+    public setX(value: number): void {
         this.x = value
 
         this.lines = this.calculateLines(this.originalLines)
     }
 
-    public getY(): number
-    {
+    public getY(): number {
         return this.y
     }
 
-    public setY(value: number): void
-    {
+    public setY(value: number): void {
         this.y = value
-        
+
         this.lines = this.calculateLines(this.originalLines)
     }
 
-    public getScale(): number
-    {
+    public getScale(): number {
         return this.scale
     }
 
-    public setScale(scale: number): void
-    {
+    public setScale(scale: number): void {
         this.scale = scale
 
         this.lines = this.calculateLines(this.originalLines)
     }
 
-    public getColor(): string
-    {
+    public getColor(): string {
         return this.color
     }
 
-    public setColor(color: string): void
-    {
+    public setColor(color: string): void {
         this.color = color
     }
 }
