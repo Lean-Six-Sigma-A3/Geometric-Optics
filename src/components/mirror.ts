@@ -199,4 +199,12 @@ export class Mirror {
     {
         return -this.getReflectionDistance() / this.getObjectDistance()
     }
+
+
+    public updateObject(newObject: LineGroup): void {
+        this.object = newObject;
+        this.reflection = this.object.clone();
+        this.draw();
+    }
+
 }
