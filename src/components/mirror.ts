@@ -1,3 +1,4 @@
+import { presetData } from "../presets/coordinates"
 import { Canvas } from "./canvas"
 import { LineGroup } from "./line-group"
 
@@ -32,12 +33,17 @@ export class Mirror {
         this.setupEvents()
         this.draw()
     }
+    
+
+    public updateScaleMinimum(minScale: number): void {
+    this.controlEl.scale.min = minScale.toString();
+    }
 
     private prepareControlElements(): void
     {
         // Atur range min & max dari input slider
         this.controlEl.scale.max = "4"
-        this.controlEl.scale.min = "1"
+        
         this.controlEl.scale.step = "0.01"
         this.controlEl.scale.value = this.object.getScale().toString()
 
