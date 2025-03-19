@@ -96,6 +96,7 @@ export class Mirror {
         this.object.setY(this.getObjectHeight())
 
         this.object.setColor("blue")
+        this.canvas.drawText("Object" ,this.getObjectDistance(), this.getObjectHeight(), 15, "12px Arial")
         this.canvas.drawLineGroup(this.object, true)
     }
 
@@ -108,12 +109,18 @@ export class Mirror {
         this.reflection.setColor("red")
 
         this.canvas.drawLineGroup(this.reflection, true)
+
+        // Add reflection label
+        this.canvas.setPenColor("red")
+        this.canvas.drawText("Bayangan", this.getReflectionDistance(), this.getReflectionHeight() - 15, "12px Arial")
+        this.canvas.resetPenColor()
     }
 
     private drawFocalPoint(): void
     {
         this.canvas.setPenColor("green")
         this.canvas.drawCircle(this.getFocalDistance(), 0, 4)
+        this.canvas.drawText(`F (${this.getFocalDistance()})`, this.getFocalDistance(), 15, "12px Arial")
         this.canvas.resetPenColor()
     }
 

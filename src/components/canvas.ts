@@ -192,7 +192,18 @@ export class Canvas {
 
         this.setPenColor("lightgrey")
         this.pen.stroke()
+
         this.resetPenColor()
+        //Add axis labels
+        this.pen.font = "14px Arial";
+        this.pen.textAlign = "center";
+        this.pen.fillText("X", this.width - 20, this.getYCenter() - 10);
+        this.pen.fillText("Y", this.getXCenter() + 10, 20);
+
+
+        //Add center point label
+        this.pen.fillText("(0,0)", this.getXCenter() + 20, this.getYCenter() + 20);
+        
     }
 
     private drawGridLines(): void
@@ -236,5 +247,12 @@ export class Canvas {
     {
         this.pen.strokeStyle = "#000000"
         this.pen.fillStyle = "#000000"
+    }
+
+    public drawText(text: string, x: number, y: number, font: string = '12px Arial', align: CanvasTextAlign = 'center'): void
+    {
+        this.pen.font = font;
+        this.pen.textAlign = align;
+        this.pen.fillText(text, x + this.getXCenter(), y + this.getYCenter());
     }
 }
