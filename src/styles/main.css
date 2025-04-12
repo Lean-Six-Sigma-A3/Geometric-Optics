@@ -27,6 +27,7 @@ body {
   position: relative;
 }
 
+.simulation-type-option,
 .legends,
 .controls {
   position: absolute;
@@ -42,6 +43,13 @@ body {
   border: 1px grey solid;
   border-radius: 0.5rem;
   box-shadow: 0 0 1rem 0.05rem #00000030;
+}
+
+/* --- Simulation Type --- */
+.simulation-type-option {
+  top: 1.5rem;
+  left: 1.5rem;
+  right: unset;
 }
 
 /* --- Legends --- */

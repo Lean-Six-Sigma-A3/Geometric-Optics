@@ -13,6 +13,12 @@ export interface MirrorControlElements {
     objectX: HTMLInputElement
     objectY: HTMLInputElement
     focalDistance: HTMLInputElement
+    simulationType: HTMLInputElement
+}
+
+export enum MirrorSimulationType {
+    CONCAVE_MIRROR = "concave-mirror",
+    CONVEX_LENSE = "convex-lense",
 }
 
 export class Mirror {
@@ -20,6 +26,7 @@ export class Mirror {
     private object: LineGroup
     private reflection: LineGroup
     private controlEl: MirrorControlElements
+    private simulationType: MirrorSimulationType
 
     public constructor(params: MirrorConstructorParameters)
     {
@@ -27,6 +34,7 @@ export class Mirror {
         this.object = params.mirrorObject
         this.reflection = this.object.clone()
         this.controlEl = params.controlEl
+        this.simulationType = MirrorSimulationType.CONCAVE_MIRROR
 
         this.prepareControlElements()
         this.setupEvents()
@@ -35,12 +43,13 @@ export class Mirror {
     
 
     public updateScaleMinimum(minScale: number): void {
-    this.controlEl.scale.min = minScale.toString();
+        this.controlEl.scale.min = minScale.toString()
     }
 
     private prepareControlElements(): void
     {
-        // Atur range min & max dari input slider
+        this.controlEl.simulationType.value = this.simulationType
+
         this.controlEl.scale.max = "4"
         
         this.controlEl.scale.step = "0.01"
@@ -61,6 +70,11 @@ export class Mirror {
 
     private setupEvents(): void
     {
+        // Ubah jenis simulasi ketika input berubah
+        this.controlEl.simulationType.addEventListener('input', () => {
+            this.simulationType = this.controlEl.simulationType.value as MirrorSimulationType
+        })
+
         // Ubah nilai skala ketika slider skala digeser
         this.controlEl.scale.addEventListener('input', () => {
             this.object.setScale(parseFloat(this.controlEl.scale.value))
@@ -70,8 +84,6 @@ export class Mirror {
         Object.values(this.controlEl).forEach(control => {
             control.addEventListener('input', () => {
                 this.draw()
-        console.log(this.canvas.getHeight() / 2, this.controlEl.objectY.value)
-        // console.log(this.canvas.getWidth() / 2, this.controlEl.objectX.value)
             })
         })
 
