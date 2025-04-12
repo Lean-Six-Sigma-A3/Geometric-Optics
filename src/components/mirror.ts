@@ -1,4 +1,3 @@
-import { presetData } from "../presets/coordinates"
 import { Canvas } from "./canvas"
 import { LineGroup } from "./line-group"
 
@@ -101,9 +100,9 @@ export class Mirror {
         this.object.setX(this.getObjectDistance())
         this.object.setY(this.getObjectHeight())
         this.object.setColor("blue")
-        
+        this.canvas.setPenColor("blue")
+        this.canvas.drawText("Object" ,this.getObjectDistance(), this.getObjectHeight(), "12px Arial")
         this.canvas.drawLineGroup(this.object, true)
-        this.canvas.drawText("Object" ,this.getObjectDistance(), -6, "12px Arial", "blue")
     }
 
     private drawReflection(): void
