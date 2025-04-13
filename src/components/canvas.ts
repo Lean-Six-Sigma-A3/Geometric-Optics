@@ -7,6 +7,18 @@ export interface CanvasConstructorParameters {
     gridSize?: number
 }
 
+export interface CanvasDrawRayLineParameters {
+    x1: number
+    y1: number 
+    x2: number 
+    y2: number
+    xMax?: number
+    yMax?: number
+    xMin?: number
+    yMin?: number
+    color?: string
+}
+
 export class Canvas {
     private element: HTMLCanvasElement
     private pen: CanvasRenderingContext2D
@@ -132,6 +144,70 @@ export class Canvas {
         this.pen.fillText(text, x + this.getXCenter(), y + this.getYCenter());
 
         this.resetPenColor()
+    }
+
+    public drawRayLine(params: CanvasDrawRayLineParameters): void
+    {
+        const {
+            x1,
+            y1,
+            x2,
+            y2,
+            xMax,
+            yMax,
+            xMin,
+            yMin,
+            color,
+        } = params
+
+        if (color) {
+            this.setPenColor(color)
+        }
+
+        const dx = x2 - x1
+        const dy = y2 - y1
+
+        const xIncrement = dx / Math.sqrt(dx * dx + dy * dy)
+        const yIncrement = dy / Math.sqrt(dx * dx + dy * dy)
+
+        let x = x1
+        let y = y1
+        
+        for (let i = 0; i < this.width; i++) {
+            const exceedsCustomConstraint = (
+                (xMax !== undefined && x > xMax) ||
+                (yMax !== undefined && y > yMax) ||
+                (xMin !== undefined && x < xMin) ||
+                (yMin !== undefined && y < yMin)
+            )
+            
+            if (!exceedsCustomConstraint || (exceedsCustomConstraint && Math.abs(Math.round(x)) % 2)) {
+                this.pen.fillRect(
+                    Math.round(x) + this.getXCenter(),
+                    -Math.round(y) + this.getYCenter(),
+                    1,
+                    1,
+                )
+            }
+
+            x += xIncrement
+            y += yIncrement
+
+            const exceedsBoundary = (
+                x < -this.width / 2 ||
+                x > this.width / 2 ||
+                y < -this.height / 2 ||
+                y > this.height / 2
+            )
+
+            if (exceedsBoundary) {
+                break;
+            }
+        }
+
+        if (color) {
+            this.resetPenColor()
+        }
     }
 
     public clearCanvas(): void

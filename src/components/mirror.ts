@@ -97,6 +97,7 @@ export class Mirror {
     {
         this.canvas.clearCanvas()
         this.drawLightRays()
+        this.drawHeightLines()
         this.drawFocalPoint()
         this.drawObject()
         this.drawReflection()
@@ -143,36 +144,55 @@ export class Mirror {
 
     private drawLightRays(): void
     {
-        const objectTopRays = [
+        // Top Ray - Object
+        const objectTopRayCoordinates = [
             [
                 this.getObjectDistance(),
                 this.getObjectHeight(),
                 0,
                 this.getObjectHeight(),
             ],
-            [
-                0,
-                this.getObjectHeight(),
-                this.getReflectionDistance(),
-                this.getReflectionHeight(),
-            ],
         ]
+        const objectTopRay = LineGroup.fromCoordinates(objectTopRayCoordinates, { color: "#FFA725" })
+        this.canvas.drawLineGroup(objectTopRay)
 
-        const objectBottomRays = [
+        // Top Ray - Reflection
+        this.canvas.drawRayLine({
+            x1: 0,
+            y1: this.getObjectHeight(),
+            x2: this.getReflectionDistance(),
+            y2: this.getReflectionHeight(),
+            xMax: 0,
+            // xMin: this.getReflectionDistance(),
+            color: "#FFA725",
+        })
+
+        // Bottom Ray - Object
+        const objectBottomRayCoordinates = [
             [
                 this.getObjectDistance(),
                 this.getObjectHeight(),
                 0,
                 this.getReflectionHeight(),
             ],
-            [
-                0,
-                this.getReflectionHeight(),
-                this.getReflectionDistance(),
-                this.getReflectionHeight(),
-            ],
         ]
+        const objectBottomRay = LineGroup.fromCoordinates(objectBottomRayCoordinates, { color: "#034C53" })
+        this.canvas.drawLineGroup(objectBottomRay)
 
+        // Bottom Ray - Reflection
+        this.canvas.drawRayLine({
+            x1: 0,
+            y1: this.getReflectionHeight(),
+            x2: this.getReflectionDistance(),
+            y2: this.getReflectionHeight(),
+            xMax: 0,
+            // xMin: this.getReflectionDistance(),
+            color: "#034C53",
+        })
+    }
+
+    public drawHeightLines(): void
+    {
         const heightLines = [
             [
                 this.getObjectDistance(),
@@ -188,8 +208,6 @@ export class Mirror {
             ],
         ]
 
-        this.canvas.drawLineGroup(LineGroup.fromCoordinates(objectTopRays, { color: "#FFA725" }))
-        this.canvas.drawLineGroup(LineGroup.fromCoordinates(objectBottomRays, { color: "#034C53" }))
         this.canvas.drawLineGroup(LineGroup.fromCoordinates(heightLines))
     }
 
