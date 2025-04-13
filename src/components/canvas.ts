@@ -97,8 +97,8 @@ export class Canvas {
 
         for (let i = 0; i <= steps; i++) {
             this.pen.fillRect(
-                Math.round(x) + this.getXCenter(),
-                Math.round(y) + this.getYCenter(),
+                x + this.getXCenter(),
+                y + this.getYCenter(),
                 1,
                 1,
             )
@@ -118,7 +118,7 @@ export class Canvas {
 
         if (withCenterIndicator) {
             this.pen.beginPath()
-            this.pen.arc(Math.round(lineGroup.getCenterX()) + this.getXCenter(), Math.round(lineGroup.getCenterY()) + this.getYCenter(), 4, 0, 2 * Math.PI)
+            this.pen.arc(lineGroup.getCenterX() + this.getXCenter(), lineGroup.getCenterY() + this.getYCenter(), 4, 0, 2 * Math.PI)
             this.pen.closePath()
             this.pen.fill()
         }
@@ -182,8 +182,8 @@ export class Canvas {
             
             if (!exceedsCustomConstraint || (exceedsCustomConstraint && Math.abs(Math.round(x)) % 2)) {
                 this.pen.fillRect(
-                    Math.round(x) + this.getXCenter(),
-                    -Math.round(y) + this.getYCenter(),
+                    x + this.getXCenter(),
+                    -y + this.getYCenter(),
                     1,
                     1,
                 )
