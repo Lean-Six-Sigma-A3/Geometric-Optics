@@ -78,53 +78,52 @@ export class Canvas {
             this.setPenColor(line.color)
         }
 
+        const clamp = (value: number) => Math.max(-this.width / 2, Math.min(this.width / 2, value))
+
         // Secara default, anchor (patokan) saat merender garis berada pada tengah-tengah canvas
-        const x1 = line.x1 + offsetX + this.getXCenter()
-        const y1 = line.y1 + offsetY + this.getYCenter()
-        const x2 = line.x2 + offsetX + this.getXCenter()
-        const y2 = line.y2 + offsetY + this.getYCenter()
-    
-        // Mulai path untuk garis
-        this.pen.beginPath()
-        // Geser pen ke (x1, y1)
-        this.pen.moveTo(x1, y1)
-        // Buat tujuan garis ke (x2, y2) dari posisi sebelumnya
-        this.pen.lineTo(x2, y2)
-        // Tutup path (biar gak tercampur dengan garis lainnya)
-        this.pen.closePath()
-        // Gambar (render) garisnya
-        this.pen.stroke()
+        const x1 = clamp(line.x1 + offsetX)
+        const y1 = clamp(line.y1 + offsetY)
+        const x2 = clamp(line.x2 + offsetX)
+        const y2 = clamp(line.y2 + offsetY)
+
+        const dx = x2 - x1
+        const dy = y2 - y1
+        const steps = Math.max(Math.abs(dx), Math.abs(dy))
+        const xIncrement = dx / steps
+        const yIncrement = dy / steps
+
+        let x = x1
+        let y = y1
+
+        for (let i = 0; i <= steps; i++) {
+            this.pen.fillRect(
+                Math.round(x) + this.getXCenter(),
+                Math.round(y) + this.getYCenter(),
+                1,
+                1,
+            )
+
+            x += xIncrement
+            y += yIncrement
+        }
     }
 
     public drawLineGroup(lineGroup: LineGroup, withCenterIndicator: boolean = false): void
     {
-        // Mulai path untuk garis
-        this.pen.beginPath()
-        lineGroup.getLines().forEach(line => {
-            // Secara default, anchor (patokan) saat merender garis berada pada tengah-tengah canvas
-            const x1 = line.x1 + this.getXCenter()
-            const y1 = line.y1 + this.getYCenter()
-            const x2 = line.x2 + this.getXCenter()
-            const y2 = line.y2 + this.getYCenter()
-        
-            // Geser pen ke (x1, y1)
-            this.pen.moveTo(x1, y1)
-            // Buat tujuan garis ke (x2, y2) dari posisi sebelumnya
-            this.pen.lineTo(x2, y2)
-        })
-        // Tutup path (biar gak tercampur dengan garis lainnya)
-        this.pen.closePath()
-
-        // Gambar (render) garisnya
         this.setPenColor(lineGroup.getColor())
-        this.pen.stroke()
+
+        lineGroup.getLines().forEach(line => {
+            this.drawLine(line)
+        })
 
         if (withCenterIndicator) {
             this.pen.beginPath()
-            this.pen.arc(lineGroup.getCenterX() + this.getXCenter(), lineGroup.getCenterY() + this.getYCenter(), 4, 0, 2 * Math.PI)
+            this.pen.arc(Math.round(lineGroup.getCenterX()) + this.getXCenter(), Math.round(lineGroup.getCenterY()) + this.getYCenter(), 4, 0, 2 * Math.PI)
             this.pen.closePath()
             this.pen.fill()
         }
+
+        this.resetPenColor()
     }
 
     public drawCircle(x: number, y: number, radius: number): void
