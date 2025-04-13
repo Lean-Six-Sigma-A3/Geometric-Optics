@@ -124,6 +124,7 @@ export class Mirror {
         this.reflection.setX(this.getReflectionDistance())
         this.reflection.setY(this.getReflectionHeight())
         this.reflection.setScale(this.getMagnificationScale() * this.reflection.getScale())
+        this.reflection.setFlipHorizontal(this.getReflectionDistance() > 0)
         this.reflection.setColor("red")
 
         this.canvas.drawLineGroup(this.reflection, true)

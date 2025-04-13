@@ -17,11 +17,14 @@ export class LineGroup {
 
     private color: string
 
+    private flipHorizontal: boolean
+
     public constructor(lines: Line[], options?: LineGroupOptions) {
         this.x = options?.x ?? 0
         this.y = options?.y ?? 0
         this.scale = options?.scale ?? 1
         this.color = options?.color ?? "#000000"
+        this.flipHorizontal = false
 
         this.originalLines = lines
         this.lines = this.calculateLines(this.originalLines)
@@ -49,9 +52,9 @@ export class LineGroup {
         // Sumbu y di-flip biar nilai positif arahnya ke atas
         // Lihat: https://www.w3schools.com/graphics/canvas_coordinates.asp
         return lines.map(line => new Line({
-            x1: line.x1 * this.scale + this.x,
+            x1: line.x1 * (this.flipHorizontal ? -Math.abs(this.scale) : Math.abs(this.scale)) + this.x,
             y1: -line.y1 * this.scale - this.y,
-            x2: line.x2 * this.scale + this.x,
+            x2: line.x2 * (this.flipHorizontal ? -Math.abs(this.scale) : Math.abs(this.scale)) + this.x,
             y2: -line.y2 * this.scale - this.y,
         }))
     }
@@ -160,5 +163,15 @@ export class LineGroup {
 
     public setColor(color: string): void {
         this.color = color
+    }
+
+    public getFlipHorizontal(): boolean {
+        return this.flipHorizontal
+    }
+
+    public setFlipHorizontal(flipped: boolean): void {
+        this.flipHorizontal = flipped
+
+        this.lines = this.calculateLines(this.originalLines)
     }
 }

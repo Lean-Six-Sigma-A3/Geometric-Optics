@@ -88,7 +88,7 @@ export class Canvas {
 
         const dx = x2 - x1
         const dy = y2 - y1
-        const steps = Math.max(Math.abs(dx), Math.abs(dy))
+        const steps = Math.sqrt(dx * dx + dy * dy)
         const xIncrement = dx / steps
         const yIncrement = dy / steps
 
