@@ -180,7 +180,13 @@ export class Canvas {
                 (yMin !== undefined && y < yMin)
             )
             
-            if (!exceedsCustomConstraint || (exceedsCustomConstraint && Math.abs(Math.round(x)) % 2)) {
+            const isNotDrawingGap = (
+                Math.abs(Math.round(x)) % 5 &&
+                (Math.abs(Math.round(x)) % 5) - 1 &&
+                (Math.abs(Math.round(x)) % 5) - 2
+            )
+
+            if (!exceedsCustomConstraint || exceedsCustomConstraint && isNotDrawingGap) {
                 this.pen.fillRect(
                     x + this.getXCenter(),
                     -y + this.getYCenter(),
