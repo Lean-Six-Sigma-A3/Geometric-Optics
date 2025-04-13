@@ -114,7 +114,7 @@ export class Mirror {
         this.object.setY(this.getObjectHeight())
         this.object.setColor("blue")
         this.canvas.setPenColor("blue")
-        this.canvas.drawText("Object" ,this.getObjectDistance(), this.getObjectHeight(), "12px Arial")
+        this.canvas.drawText("Object" ,this.getObjectDistance(), this.object.getScale() > 0 ? 16 : -6, "12px Arial", "blue")
         this.canvas.drawLineGroup(this.object, true)
     }
 
@@ -131,7 +131,7 @@ export class Mirror {
 
         // Add reflection label
         this.canvas.setPenColor("red")
-        this.canvas.drawText("Bayangan", this.getReflectionDistance(), -6, "12px Arial", "red")
+        this.canvas.drawText("Bayangan", this.getReflectionDistance(), this.reflection.getScale() > 0 ? 16 : -6, "12px Arial", "red")
         this.canvas.resetPenColor()
     }
 
