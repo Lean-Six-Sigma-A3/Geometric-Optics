@@ -120,26 +120,23 @@ export class Mirror {
 
     private drawReflection(): void
     {
+        const reflectionDistance = 
+            this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
+                ? this.getReflectionDistance()
+                : -this.getReflectionDistance()
+
         this.reflection = this.object.clone()
-        this.reflection.setX(this.getReflectionDistance())
+        this.reflection.setX(reflectionDistance)
         this.reflection.setY(this.getReflectionHeight())
         this.reflection.setScale(this.getMagnificationScale() * this.reflection.getScale())
-        this.reflection.setFlipHorizontal(this.getReflectionDistance() > 0)
+        this.reflection.setFlipHorizontal(reflectionDistance > 0)
         this.reflection.setColor("red")
 
         this.canvas.drawLineGroup(this.reflection, true)
 
         // Add reflection label
         this.canvas.setPenColor("red")
-        this.canvas.drawText("Bayangan", this.getReflectionDistance(), this.reflection.getScale() > 0 ? 16 : -6, "12px Arial", "red")
-        this.canvas.resetPenColor()
-    }
-
-    private drawFocalPoint(): void
-    {
-        this.canvas.setPenColor("green")
-        this.canvas.drawCircle(this.getFocalDistance(), 0, 4)
-        this.canvas.drawText(`F (${this.getFocalDistance()})`, this.getFocalDistance(), 15, "12px Arial", "green")
+        this.canvas.drawText("Bayangan", reflectionDistance, this.reflection.getScale() > 0 ? 16 : -6, "12px Arial", "red")
         this.canvas.resetPenColor()
     }
 
@@ -161,7 +158,9 @@ export class Mirror {
         this.canvas.drawRayLine({
             x1: 0,
             y1: this.getObjectHeight(),
-            x2: this.getReflectionDistance(),
+            x2: this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
+                ? this.getReflectionDistance()
+                : -this.getReflectionDistance(),
             y2: this.getReflectionHeight(),
             xMax: 0,
             // xMin: this.getReflectionDistance(),
@@ -184,7 +183,9 @@ export class Mirror {
         this.canvas.drawRayLine({
             x1: 0,
             y1: this.getReflectionHeight(),
-            x2: this.getReflectionDistance(),
+            x2: this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
+                ? this.getReflectionDistance()
+                : -this.getReflectionDistance(),
             y2: this.getReflectionHeight(),
             xMax: 0,
             // xMin: this.getReflectionDistance(),
@@ -192,8 +193,20 @@ export class Mirror {
         })
     }
 
+    private drawFocalPoint(): void
+    {
+        this.canvas.setPenColor("green")
+        this.canvas.drawCircle(this.getFocalDistance(), 0, 4)
+        this.canvas.drawText(`F (${this.getFocalDistance()})`, this.getFocalDistance(), 15, "12px Arial", "green")
+        this.canvas.resetPenColor()
+    }
+
     public drawHeightLines(): void
     {
+        const reflectionDistance = this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
+            ? this.getReflectionDistance()
+            : -this.getReflectionDistance()
+
         const heightLines = [
             [
                 this.getObjectDistance(),
@@ -202,9 +215,9 @@ export class Mirror {
                 this.getObjectHeight(),
             ],
             [
-                this.getReflectionDistance(),
+                reflectionDistance,
                 0,
-                this.getReflectionDistance(),
+                reflectionDistance,
                 this.getReflectionHeight(),
             ],
         ]
