@@ -90,6 +90,10 @@ body {
   border: 1px solid #034C53;
 }
 
+.line__brown {
+  border: 1px solid #33333380;
+}
+
 .line__dashed__black {
   border: 1px solid #000000;
 }

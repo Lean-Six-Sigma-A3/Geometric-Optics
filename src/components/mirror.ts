@@ -96,6 +96,7 @@ export class Mirror {
     private draw(): void
     {
         this.canvas.clearCanvas()
+        this.drawMirrorOrLense()
         this.drawLightRays()
         this.drawHeightLines()
         this.drawFocalPoint()
@@ -182,6 +183,29 @@ export class Mirror {
             // xMin: this.getReflectionDistance(),
             color: "#034C53",
         })
+    }
+
+    private drawMirrorOrLense(): void
+    {
+        this.canvas.setPenColor("#33333380")
+
+        const pen = this.canvas.getPen()
+        pen.lineWidth = 3
+        pen.beginPath()
+
+        if (this.simulationType === MirrorSimulationType.CONCAVE_MIRROR) {
+            // Mirror
+            pen.ellipse(this.canvas.getXCenter() - 24, this.canvas.getYCenter(), 30, 250, 0, -0.45 * Math.PI, 0.45 * Math.PI)
+        }
+        else {
+            // Lense
+            pen.ellipse(this.canvas.getXCenter(), this.canvas.getYCenter(), 20, 250, 0, 0, 2 * Math.PI)
+        }
+
+        pen.stroke()
+        pen.lineWidth = 1
+
+        this.canvas.resetPenColor()
     }
 
     private drawFocalPoint(): void
