@@ -120,23 +120,18 @@ export class Mirror {
 
     private drawReflection(): void
     {
-        const reflectionDistance = 
-            this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
-                ? this.getReflectionDistance()
-                : -this.getReflectionDistance()
-
         this.reflection = this.object.clone()
-        this.reflection.setX(reflectionDistance)
+        this.reflection.setX(this.getReflectionDistance())
         this.reflection.setY(this.getReflectionHeight())
         this.reflection.setScale(this.getMagnificationScale() * this.reflection.getScale())
-        this.reflection.setFlipHorizontal(reflectionDistance > 0)
+        this.reflection.setFlipHorizontal(this.getReflectionDistance() > 0)
         this.reflection.setColor("red")
 
         this.canvas.drawLineGroup(this.reflection, true)
 
         // Add reflection label
         this.canvas.setPenColor("red")
-        this.canvas.drawText("Bayangan", reflectionDistance, this.reflection.getScale() > 0 ? 16 : -6, "12px Arial", "red")
+        this.canvas.drawText("Bayangan", this.getReflectionDistance(), this.reflection.getScale() > 0 ? 16 : -6, "12px Arial", "red")
         this.canvas.resetPenColor()
     }
 
@@ -158,9 +153,7 @@ export class Mirror {
         this.canvas.drawRayLine({
             x1: 0,
             y1: this.getObjectHeight(),
-            x2: this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
-                ? this.getReflectionDistance()
-                : -this.getReflectionDistance(),
+            x2: this.getReflectionDistance(),
             y2: this.getReflectionHeight(),
             xMax: 0,
             // xMin: this.getReflectionDistance(),
@@ -183,9 +176,7 @@ export class Mirror {
         this.canvas.drawRayLine({
             x1: 0,
             y1: this.getReflectionHeight(),
-            x2: this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
-                ? this.getReflectionDistance()
-                : -this.getReflectionDistance(),
+            x2: this.getReflectionDistance(),
             y2: this.getReflectionHeight(),
             xMax: 0,
             // xMin: this.getReflectionDistance(),
@@ -203,10 +194,6 @@ export class Mirror {
 
     public drawHeightLines(): void
     {
-        const reflectionDistance = this.simulationType === MirrorSimulationType.CONCAVE_MIRROR 
-            ? this.getReflectionDistance()
-            : -this.getReflectionDistance()
-
         const heightLines = [
             [
                 this.getObjectDistance(),
@@ -215,9 +202,9 @@ export class Mirror {
                 this.getObjectHeight(),
             ],
             [
-                reflectionDistance,
+                this.getReflectionDistance(),
                 0,
-                reflectionDistance,
+                this.getReflectionDistance(),
                 this.getReflectionHeight(),
             ],
         ]
@@ -249,9 +236,16 @@ export class Mirror {
         return parseFloat(this.controlEl.focalDistance.value)
     }
 
-    private getReflectionDistance(): number
+    private getRawReflectionDistance(): number
     {
         return 1 / (1 / this.getFocalDistance() - 1 / this.getObjectDistance())
+    }
+
+    private getReflectionDistance(): number
+    {
+        return this.simulationType === MirrorSimulationType.CONCAVE_MIRROR
+            ? this.getRawReflectionDistance()
+            : -this.getRawReflectionDistance()
     }
 
     private getReflectionHeight(): number
@@ -261,6 +255,6 @@ export class Mirror {
     
     public getMagnificationScale(): number
     {
-        return -this.getReflectionDistance() / this.getObjectDistance()
+        return -this.getRawReflectionDistance() / this.getObjectDistance()
     }
 }
